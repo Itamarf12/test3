@@ -9,6 +9,7 @@ from ray import serve
 class Translator:
     def __init__(self):
         #self.model = pipeline("translation_en_to_de", model="t5-small")
+        pass
 
     def translate(self, text: str) -> str:
         #return self.model(text)[0]["translation_text"]
