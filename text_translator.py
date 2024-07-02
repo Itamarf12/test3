@@ -5,6 +5,9 @@ import os
 #from transformers import pipeline
 
 from ray import serve
+import logging
+
+ray_serve_logger = logging.getLogger("ray.serve")
 
 
 @serve.deployment
@@ -15,6 +18,7 @@ class Translator:
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
         print("11111111111111111111111")
+
         region = 'us-east-1'
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
@@ -31,6 +35,7 @@ class Translator:
     def translate(self, text: str) -> str:
         #return self.model(text)[0]["translation_text"]
         print("22222222222222222222")
+        ray_serve_logger.warning("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
