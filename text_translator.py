@@ -2,7 +2,7 @@ import starlette
 import boto3
 import os
 import random
-
+import torch
 #from transformers import pipeline
 
 from ray import serve
@@ -50,9 +50,10 @@ class Translator:
         region = 'us-east-1'
         bucket_name = 'nonsensitive-data'
         s3_directory = 'phi3-small'
-        local_directory = '/tmp/'
+        local_directory = '/tmp/model'
+        os.makedirs(local_directory)
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
-    
+
 
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
