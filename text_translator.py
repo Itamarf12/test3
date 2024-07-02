@@ -50,8 +50,8 @@ class Translator:
         region = 'us-east-1'
         bucket_name = 'nonsensitive-data'
         s3_directory = 'phi3-small'
-        local_directory = '/tmp/model'
-        os.makedirs(local_directory)
+        local_directory = '/tmp'
+        #os.makedirs(local_directory)
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
 
 
