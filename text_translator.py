@@ -39,6 +39,8 @@ class Translator:
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
+        print("3333333333333333")
+        ray_serve_logger.warning("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         #req = await req.json()
         #return self.translate(req["text"])
         return self.folders
