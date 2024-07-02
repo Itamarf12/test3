@@ -67,7 +67,7 @@ class Translator:
 
     async def __call__(self, req: starlette.requests.Request):
         print("3333333333333333")
-        ray_serve_logger.warning("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+        ray_serve_logger.warning("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
         current_path = os.getcwd()
         ray_serve_logger.warning("kkkkkkkkkkkkkkkkkkkkkkkkkCurrent Path:", current_path)
         #req = await req.json()
