@@ -14,7 +14,7 @@ class Translator:
 
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        print("11111111111111111111111")
         region = 'us-east-1'
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
@@ -30,7 +30,7 @@ class Translator:
 
     def translate(self, text: str) -> str:
         #return self.model(text)[0]["translation_text"]
-        print("bbbbbbbbbbbbbbbbbbbbbbbbbb")
+        print("22222222222222222222")
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
