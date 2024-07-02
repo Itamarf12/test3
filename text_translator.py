@@ -39,6 +39,21 @@ def download_directory_from_s3(access_key, secret_key, region, bucket_name, s3_d
         bucket.download_file(obj.key, target)
         print(f"Downloaded {obj.key} to {target}")
 
+def load_model(model_path):
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    finetuned_model = "/Users/itamarlevi/Downloads/phi_model_2"
+    compute_dtype = torch.float32
+    device = torch.device("cpu")
+    model = AutoPeftModelForCausalLM.from_pretrained(
+        finetuned_model,
+        torch_dtype=compute_dtype,
+        return_dict=False,
+        low_cpu_mem_usage=True,
+        device_map=device,
+        trust_remote_code=True
+    )
+    return model, tokenizer
+
 
 @serve.deployment
 class Translator:
@@ -50,8 +65,8 @@ class Translator:
         region = 'us-east-1'
         bucket_name = 'nonsensitive-data'
         s3_directory = 'phi3-small'
-        local_directory = '/tmp'
-        #os.makedirs(local_directory)
+        local_directory = '/tmp/phi3'
+        os.makedirs(local_directory)
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
 
 
