@@ -68,7 +68,11 @@ class Translator:
     async def __call__(self, req: starlette.requests.Request):
         print("3333333333333333")
         ray_serve_logger.warning("r1rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-        ray_serve_logger.warning("r2rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+        file_path = f"/tmp/text_{random.randint(1, 10)}.txt"
+        with open(file_path, 'w') as file:
+            file.write('Hello, world!')
+
+        ray_serve_logger.warning("r2rrrrrrrrrrrrrrrwrote rrrrrrrrrrrrrrrrrrrrrrrr")
         current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
         ray_serve_logger.warning("r3rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
