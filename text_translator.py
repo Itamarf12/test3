@@ -3,8 +3,8 @@ import boto3
 import os
 import random
 import torch
-#from transformers import pipeline
-
+from transformers import pipeline
+from peft import AutoPeftModelForCausalLM
 from ray import serve
 import logging
 
