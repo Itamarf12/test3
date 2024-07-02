@@ -2,7 +2,7 @@ import starlette
 import boto3
 import os
 import random
-import torch
+#import torch
 #from transformers import pipeline
 
 from ray import serve
