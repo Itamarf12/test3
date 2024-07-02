@@ -10,6 +10,35 @@ import logging
 ray_serve_logger = logging.getLogger("ray.serve")
 
 
+
+def download_directory_from_s3(access_key, secret_key, region, bucket_name, s3_directory, local_directory):
+    session = boto3.Session(
+        aws_access_key_id=access_key,
+        aws_secret_access_key=secret_key,
+        region_name=region
+    )
+
+    s3 = session.resource('s3')
+    bucket = s3.Bucket(bucket_name)
+
+    # Ensure the local directory exists
+    if not os.path.exists(local_directory):
+        os.makedirs(local_directory)
+
+    # Iterate over objects in the S3 directory
+    for obj in bucket.objects.filter(Prefix=s3_directory):
+        target = os.path.join(local_directory, os.path.relpath(obj.key, s3_directory))
+
+        if not os.path.exists(os.path.dirname(target)):
+            os.makedirs(os.path.dirname(target))
+
+        if obj.key.endswith('/'):
+            continue  # Skip directories, only download files
+
+        bucket.download_file(obj.key, target)
+        print(f"Downloaded {obj.key} to {target}")
+
+
 @serve.deployment
 class Translator:
     def __init__(self):
@@ -17,9 +46,9 @@ class Translator:
 
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        print("11111111111111111111111")
-
         region = 'us-east-1'
+        #download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
+
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
             aws_secret_access_key=aws_secret_access_key,
@@ -34,13 +63,13 @@ class Translator:
 
     def translate(self, text: str) -> str:
         #return self.model(text)[0]["translation_text"]
-        print("22222222222222222222")
-        ray_serve_logger.warning("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
         print("3333333333333333")
         ray_serve_logger.warning("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+        current_path = os.getcwd()
+        ray_serve_logger.warning("kkkkkkkkkkkkkkkkkkkkkkkkkCurrent Path:", current_path)
         #req = await req.json()
         #return self.translate(req["text"])
         return self.folders
