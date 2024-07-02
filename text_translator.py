@@ -48,7 +48,11 @@ class Translator:
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
         region = 'us-east-1'
-        #download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
+        bucket_name = 'nonsensitive-data'
+        s3_directory = 'phi3-small'
+        local_directory = '/tmp/'
+        download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
+    
 
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
