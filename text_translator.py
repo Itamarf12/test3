@@ -39,20 +39,20 @@ def download_directory_from_s3(access_key, secret_key, region, bucket_name, s3_d
         bucket.download_file(obj.key, target)
         print(f"Downloaded {obj.key} to {target}")
 
-def load_model(model_path):
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-    finetuned_model = "/Users/itamarlevi/Downloads/phi_model_2"
-    compute_dtype = torch.float32
-    device = torch.device("cpu")
-    model = AutoPeftModelForCausalLM.from_pretrained(
-        finetuned_model,
-        torch_dtype=compute_dtype,
-        return_dict=False,
-        low_cpu_mem_usage=True,
-        device_map=device,
-        trust_remote_code=True
-    )
-    return model, tokenizer
+# def load_model(model_path):
+#     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+#     finetuned_model = "/Users/itamarlevi/Downloads/phi_model_2"
+#     compute_dtype = torch.float32
+#     device = torch.device("cpu")
+#     model = AutoPeftModelForCausalLM.from_pretrained(
+#         finetuned_model,
+#         torch_dtype=compute_dtype,
+#         return_dict=False,
+#         low_cpu_mem_usage=True,
+#         device_map=device,
+#         trust_remote_code=True
+#     )
+#     return model, tokenizer
 
 
 @serve.deployment
