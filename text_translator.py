@@ -96,6 +96,7 @@ class Translator:
         ray_serve_logger.warning("r2rrrrrrrrrrrrrrrwrote rrrrrrrrrrrrrrrrrrrrrrrr")
         current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
+        local_directory = '/tmp/phi3'
         load_model(local_directory)
         ray_serve_logger.warning("r3rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
         ray_serve_logger.warning(f"kkkkkkkkkkkkkkkkkkkkkkkkkCurrent Path:   {current_path}")
