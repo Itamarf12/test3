@@ -54,6 +54,39 @@ def load_model(model_path):
     return model, tokenizer
 
 
+
+def get_next_word_probabilities(sentence, tokenizer, device, model, top_k=2):
+
+    # Get the model predictions for the sentence.
+    inputs = tokenizer.encode(sentence, return_tensors="pt").to(device)  # .cuda()
+    outputs = model(inputs)
+    predictions = outputs[0]
+
+
+    # Get the next token candidates.
+    next_token_candidates_tensor = predictions[0, -1, :]
+
+    # Get the top k next token candidates.
+    topk_candidates_indexes = torch.topk(
+        next_token_candidates_tensor, top_k).indices.tolist()
+
+    # Get the token probabilities for all candidates.
+    all_candidates_probabilities = torch.nn.functional.softmax(
+        next_token_candidates_tensor, dim=-1)
+
+    # Filter the token probabilities for the top k candidates.
+    topk_candidates_probabilities = \
+        all_candidates_probabilities[topk_candidates_indexes].tolist()
+
+    # Decode the top k candidates back to words.
+    topk_candidates_tokens = \
+        [tokenizer.decode([idx]).strip() for idx in topk_candidates_indexes]
+
+    # Return the top k candidates and their probabilities.
+    return list(zip(topk_candidates_tokens, topk_candidates_probabilities))
+
+
+
 @serve.deployment
 class Translator:
     def __init__(self):
@@ -104,13 +137,15 @@ class Translator:
 
         ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start predict rrrrrrrrrrrrrr")
         sentence = "I enjoy walking in the"
-        inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
-        outputs = self.model(inputs)
-        predictions = outputs[0]
-        ray_serve_logger.warning(predictions)
+        re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
+        ray_serve_logger.warning(re)
+        # inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
+        # outputs = self.model(inputs)
+        # predictions = outputs[0]
+        # ray_serve_logger.warning(predictions)
         ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Stop predict rrrrrrrrrrrrrr")
 
-        
+
         #req = await req.json()
         #return self.translate(req["text"])
         return self.folders
