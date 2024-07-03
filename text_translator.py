@@ -54,6 +54,8 @@ def load_model(model_path):
     return model, tokenizer
 
 
+def predict(model, )
+
 @serve.deployment
 class Translator:
     def __init__(self):
@@ -96,7 +98,12 @@ class Translator:
         current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
         local_directory = '/tmp/phi3'
-        load_model(local_directory)
+        self.model, self.tokenizer = load_model(local_directory)
+        sentence = "I enjoy walking in the"
+        inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(device)  # .cuda()
+        outputs = self.model(inputs)
+        predictions = outputs[0]
+        ray_serve_logger.warning(predictions)
         ray_serve_logger.warning("r3rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
         ray_serve_logger.warning(f"kkkkkkkkkkkkkkkkkkkkkkkkkCurrent Path:   {current_path}")
         #req = await req.json()
