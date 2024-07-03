@@ -68,7 +68,7 @@ class Translator:
         local_directory = '/tmp/phi3'
         #os.makedirs(local_directory)
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
-        load_model(local_directory)
+
 
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
@@ -96,6 +96,7 @@ class Translator:
         ray_serve_logger.warning("r2rrrrrrrrrrrrrrrwrote rrrrrrrrrrrrrrrrrrrrrrrr")
         current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
+        load_model(local_directory)
         ray_serve_logger.warning("r3rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
         ray_serve_logger.warning(f"kkkkkkkkkkkkkkkkkkkkkkkkkCurrent Path:   {current_path}")
         #req = await req.json()
