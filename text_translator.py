@@ -39,19 +39,6 @@ def download_directory_from_s3(access_key, secret_key, region, bucket_name, s3_d
         bucket.download_file(obj.key, target)
         print(f"Downloaded {obj.key} to {target}")
 
-def load_model(model_path):
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-    compute_dtype = torch.float32
-    device = torch.device("cpu")
-    model = AutoPeftModelForCausalLM.from_pretrained(
-        model_path,
-        torch_dtype=compute_dtype,
-        return_dict=False,
-        low_cpu_mem_usage=True,
-        device_map=device,
-        trust_remote_code=True
-    )
-    return model, tokenizer
 
 
 @serve.deployment
@@ -67,7 +54,6 @@ class Translator:
         local_directory = '/tmp/phi3'
         #os.makedirs(local_directory)
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
-        self.model, self.tokenizer = load_model(local_directory)
 
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
@@ -95,6 +81,8 @@ class Translator:
         ray_serve_logger.warning("r2rrrrrrrrrrrrrrrwrote rrrrrrrrrrrrrrrrrrrrrrrr")
         current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
+        local_directory = '/tmp/phi3'
+        self.model, self.tokenizer = load_model(local_directory)
         sentence = "I enjoy walking in the"
         inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
         outputs = self.model(inputs)
