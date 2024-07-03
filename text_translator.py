@@ -144,6 +144,7 @@ class Translator:
         # predictions = outputs[0]
         # ray_serve_logger.warning(predictions)
         ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Stop predict rrrrrrrrrrrrrr")
+        req = await req.json()
         ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req rrrrrrrrrrrrrr {req}")
         if 'text' in req:
             ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr {req['text']}")
