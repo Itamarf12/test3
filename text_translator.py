@@ -138,7 +138,7 @@ class Translator:
         ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start predict rrrrrrrrrrrrrr")
         #sentence = "I enjoy walking in the"
 
-        ray_serve_logger.warning(re)
+        #ray_serve_logger.warning(re)
         # inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
         # outputs = self.model(inputs)
         # predictions = outputs[0]
