@@ -136,8 +136,8 @@ class Translator:
             ray_serve_logger.warning("rrrrrrrrrrrrrrrrr End to load model rrrrrrrrrrrrrr")
 
         ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start predict rrrrrrrrrrrrrr")
-        sentence = "I enjoy walking in the"
-        re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
+        #sentence = "I enjoy walking in the"
+
         ray_serve_logger.warning(re)
         # inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
         # outputs = self.model(inputs)
@@ -146,8 +146,11 @@ class Translator:
         ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Stop predict rrrrrrrrrrrrrr")
         req = await req.json()
         ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req rrrrrrrrrrrrrr {req}")
+        re = 'no data'
         if 'text' in req:
             ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr {req['text']}")
+            sentence = req['text']
+            re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
         else:
             ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr no text")
 
