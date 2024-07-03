@@ -88,25 +88,29 @@ class Translator:
 
     async def __call__(self, req: starlette.requests.Request):
         print("3333333333333333")
-        ray_serve_logger.warning("r1rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-        file_path = f"/tmp/text_{random.randint(1, 10)}.txt"
-        with open(file_path, 'w') as file:
-            file.write('Hello, world!')
 
-        ray_serve_logger.warning("r2rrrrrrrrrrrrrrrwrote rrrrrrrrrrrrrrrrrrrrrrrr")
+        # file_path = f"/tmp/text_{random.randint(1, 10)}.txt"
+        # with open(file_path, 'w') as file:
+        #     file.write('Hello, world!')
+
+
         current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
         if self.model is None:
+            ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start to load model rrrrrrrrrrrrrr")
             local_directory = '/tmp/phi3'
             self.model, self.tokenizer = load_model(local_directory)
+            ray_serve_logger.warning("rrrrrrrrrrrrrrrrr End to load model rrrrrrrrrrrrrr")
 
+        ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start predict rrrrrrrrrrrrrr")
         sentence = "I enjoy walking in the"
         inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
         outputs = self.model(inputs)
         predictions = outputs[0]
         ray_serve_logger.warning(predictions)
-        ray_serve_logger.warning("r3rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-        ray_serve_logger.warning(f"kkkkkkkkkkkkkkkkkkkkkkkkkCurrent Path:   {current_path}")
+        ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Stop predict rrrrrrrrrrrrrr")
+
+        
         #req = await req.json()
         #return self.translate(req["text"])
         return self.folders
