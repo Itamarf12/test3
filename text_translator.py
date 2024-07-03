@@ -127,7 +127,7 @@ class Translator:
         #     file.write('Hello, world!')
 
 
-        current_path = os.getcwd()
+        #current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
         if self.model is None:
             ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start to load model rrrrrrrrrrrrrr")
@@ -144,11 +144,17 @@ class Translator:
         # predictions = outputs[0]
         # ray_serve_logger.warning(predictions)
         ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Stop predict rrrrrrrrrrrrrr")
+        ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req rrrrrrrrrrrrrr {req}")
+        if 'text' in req:
+            ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr {req['text']}")
+        else:
+            ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr no text")
 
 
         #req = await req.json()
         #return self.translate(req["text"])
-        return self.folders
+        #return self.folders
+        return re
 
 
 
