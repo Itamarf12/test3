@@ -67,7 +67,7 @@ class Translator:
         local_directory = '/tmp/phi3'
         #os.makedirs(local_directory)
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
-
+        self.model, self.tokenizer = load_model(local_directory)
 
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
@@ -95,8 +95,6 @@ class Translator:
         ray_serve_logger.warning("r2rrrrrrrrrrrrrrrwrote rrrrrrrrrrrrrrrrrrrrrrrr")
         current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
-        local_directory = '/tmp/phi3'
-        self.model, self.tokenizer = load_model(local_directory)
         sentence = "I enjoy walking in the"
         inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
         outputs = self.model(inputs)
