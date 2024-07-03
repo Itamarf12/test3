@@ -54,8 +54,6 @@ def load_model(model_path):
     return model, tokenizer
 
 
-def predict(model, )
-
 @serve.deployment
 class Translator:
     def __init__(self):
