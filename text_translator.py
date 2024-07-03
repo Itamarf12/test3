@@ -58,7 +58,7 @@ def load_model(model_path):
 class Translator:
     def __init__(self):
         #self.model = pipeline("translation_en_to_de", model="t5-small")
-
+        self.device = 'cpu'
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
         region = 'us-east-1'
@@ -98,7 +98,7 @@ class Translator:
         local_directory = '/tmp/phi3'
         self.model, self.tokenizer = load_model(local_directory)
         sentence = "I enjoy walking in the"
-        inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(device)  # .cuda()
+        inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
         outputs = self.model(inputs)
         predictions = outputs[0]
         ray_serve_logger.warning(predictions)
