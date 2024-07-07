@@ -129,6 +129,8 @@ class Translator:
 
         #current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
+        if 4 > 2:
+            return "nnnn"
         if self.model is None:
             ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start to load model rrrrrrrrrrrrrr")
             local_directory = '/tmp/phi3'
