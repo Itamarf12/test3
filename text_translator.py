@@ -3,7 +3,7 @@ import boto3
 import os
 import random
 import torch
-from transformers import pipeline, AutoTokenizer
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 #from peft import AutoPeftModelForCausalLM
 from ray import serve
 import logging
