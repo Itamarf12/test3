@@ -96,7 +96,7 @@ class Translator:
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
         region = 'us-east-1'
         bucket_name = 'nonsensitive-data'
-        s3_directory = 'phi3-small'
+        s3_directory = 'phi3_finetuned'
         local_directory = '/tmp/phi3'
         #os.makedirs(local_directory)
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
