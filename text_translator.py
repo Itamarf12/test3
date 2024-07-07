@@ -4,7 +4,7 @@ import os
 import random
 import torch
 from transformers import pipeline, AutoTokenizer
-from peft import AutoPeftModelForCausalLM
+#from peft import AutoPeftModelForCausalLM
 from ray import serve
 import logging
 
@@ -43,7 +43,7 @@ def load_model(model_path):
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
     compute_dtype = torch.float32
     device = torch.device("cpu")
-    model = AutoPeftModelForCausalLM.from_pretrained(
+    model = AutoModelForCausalLM.from_pretrained(
         model_path,
         torch_dtype=compute_dtype,
         return_dict=False,
@@ -129,8 +129,8 @@ class Translator:
 
         #current_path = os.getcwd()
         #current_path = os.path.abspath(__file__)
-        if 4 > 2:
-            return "nnnn"
+        # if 4 > 2:
+        #     return "nnnn"
         if self.model is None:
             ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start to load model rrrrrrrrrrrrrr")
             local_directory = '/tmp/phi3'
