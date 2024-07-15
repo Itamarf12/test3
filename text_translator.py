@@ -15,6 +15,7 @@ MODEL_LOCAL_DIR = '/tmp/phi3'
 DEVICE = 'cpu'
 
 def download_directory_from_s3(access_key, secret_key, region, bucket_name, s3_directory, local_directory):
+    ray_serve_logger.warning("Start Model downloading ..")
     session = boto3.Session(
         aws_access_key_id=access_key,
         aws_secret_access_key=secret_key,
@@ -39,12 +40,14 @@ def download_directory_from_s3(access_key, secret_key, region, bucket_name, s3_d
             continue  # Skip directories, only download files
 
         bucket.download_file(obj.key, target)
-        print(f"Downloaded {obj.key} to {target}")
+        ray_serve_logger.warning(f"Model downloaded {obj.key} to {target}")
+
 
 def load_model(model_path):
+    ray_serve_logger.warning("Start Model loading ..")
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
     compute_dtype = torch.float32
-    device = torch.device("cpu")
+    device = torch.device(DEVICE)
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
         torch_dtype=compute_dtype,
@@ -53,6 +56,7 @@ def load_model(model_path):
         device_map=device,
         trust_remote_code=True
     )
+    ray_serve_logger.warning(f"Model was loaded successfully.")
     return model, tokenizer
 
 
@@ -93,24 +97,8 @@ class Translator:
         self.device = DEVICE
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        #region = 'us-east-1'
-        #bucket_name = 'nonsensitive-data'
-        #s3_directory = 'phi3_finetuned'
-        #local_directory = '/tmp/phi3'
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, REGION, BUCKET, S3_DIRECTORY, MODEL_LOCAL_DIR)
         self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
-
-        # session = boto3.Session(
-        #     aws_access_key_id=aws_access_key_id,
-        #     aws_secret_access_key=aws_secret_access_key,
-        #     region_name=region
-        # )
-        # s3 = session.client('s3')
-        # bucket = 'nonsensitive-data'
-        # prefix = 'demo'
-        # response = s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
-        # if 'Contents' in response:
-        #     self.folders = [item['Key'] for item in response['Contents']]
 
     def translate(self, text: str) -> str:
         #return self.model(text)[0]["translation_text"]
@@ -118,18 +106,17 @@ class Translator:
 
     async def __call__(self, req: starlette.requests.Request):
         req = await req.json()
-        re = 'no data'
+        re = 'NO DATA - missing text field'
         if 'text' in req:
-            ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr {req['text']}")
             sentence = req['text']
             re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
         else:
-            ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr no text")
+            ray_serve_logger.warning(f"Missing text field in the json  request = {req}")
         return re
 
 
 
 #app = Translator.options(route_prefix="/translate").bind()
-app = Translator.options(route_prefix="/translate").bind()
+app = Translator.bind()
 
 
