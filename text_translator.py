@@ -4,13 +4,15 @@ import os
 import random
 import torch
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
-#from peft import AutoPeftModelForCausalLM
 from ray import serve
 import logging
 
 ray_serve_logger = logging.getLogger("ray.serve")
-
-
+BUCKET = 'nonsensitive-data'
+REGION = 'us-east-1'
+S3_DIRECTORY = 'phi3_finetuned'
+MODEL_LOCAL_DIR = '/tmp/phi3'
+DEVICE = 'cpu'
 
 def download_directory_from_s3(access_key, secret_key, region, bucket_name, s3_directory, local_directory):
     session = boto3.Session(
@@ -54,7 +56,6 @@ def load_model(model_path):
     return model, tokenizer
 
 
-
 def get_next_word_probabilities(sentence, tokenizer, device, model, top_k=2):
 
     # Get the model predictions for the sentence.
@@ -86,68 +87,37 @@ def get_next_word_probabilities(sentence, tokenizer, device, model, top_k=2):
     return list(zip(topk_candidates_tokens, topk_candidates_probabilities))
 
 
-
 @serve.deployment
 class Translator:
     def __init__(self):
-        #self.model = pipeline("translation_en_to_de", model="t5-small")
-        self.device = 'cpu'
+        self.device = DEVICE
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        region = 'us-east-1'
-        bucket_name = 'nonsensitive-data'
-        s3_directory = 'phi3_finetuned'
-        local_directory = '/tmp/phi3'
-        #os.makedirs(local_directory)
-        download_directory_from_s3(aws_access_key_id, aws_secret_access_key, region, bucket_name, s3_directory, local_directory)
-        self.model, self.tokenizer = load_model(local_directory)
-        #self.model = None
+        #region = 'us-east-1'
+        #bucket_name = 'nonsensitive-data'
+        #s3_directory = 'phi3_finetuned'
+        #local_directory = '/tmp/phi3'
+        download_directory_from_s3(aws_access_key_id, aws_secret_access_key, REGION, BUCKET, S3_DIRECTORY, MODEL_LOCAL_DIR)
+        self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
 
-        session = boto3.Session(
-            aws_access_key_id=aws_access_key_id,
-            aws_secret_access_key=aws_secret_access_key,
-            region_name=region
-        )
-        s3 = session.client('s3')
-        bucket = 'nonsensitive-data'
-        prefix = 'demo'
-        response = s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
-        if 'Contents' in response:
-            self.folders = [item['Key'] for item in response['Contents']]
+        # session = boto3.Session(
+        #     aws_access_key_id=aws_access_key_id,
+        #     aws_secret_access_key=aws_secret_access_key,
+        #     region_name=region
+        # )
+        # s3 = session.client('s3')
+        # bucket = 'nonsensitive-data'
+        # prefix = 'demo'
+        # response = s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
+        # if 'Contents' in response:
+        #     self.folders = [item['Key'] for item in response['Contents']]
 
     def translate(self, text: str) -> str:
         #return self.model(text)[0]["translation_text"]
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
-        #print("3333333333333333")
-
-        # file_path = f"/tmp/text_{random.randint(1, 10)}.txt"
-        # with open(file_path, 'w') as file:
-        #     file.write('Hello, world!')
-
-
-        #current_path = os.getcwd()
-        #current_path = os.path.abspath(__file__)
-        # if 4 > 2:
-        #     return "nnnn"
-        # if self.model is None:
-        #     ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start to load model rrrrrrrrrrrrrr")
-        #     local_directory = '/tmp/phi3'
-        #     self.model, self.tokenizer = load_model(local_directory)
-        #     ray_serve_logger.warning("rrrrrrrrrrrrrrrrr End to load model rrrrrrrrrrrrrr")
-        #
-        # ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Start predict rrrrrrrrrrrrrr")
-        #sentence = "I enjoy walking in the"
-
-        #ray_serve_logger.warning(re)
-        # inputs = self.tokenizer.encode(sentence, return_tensors="pt").to(self.device)  # .cuda()
-        # outputs = self.model(inputs)
-        # predictions = outputs[0]
-        # ray_serve_logger.warning(predictions)
-        # ray_serve_logger.warning("rrrrrrrrrrrrrrrrr Stop predict rrrrrrrrrrrrrr")
         req = await req.json()
-        # ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req rrrrrrrrrrrrrr {req}")
         re = 'no data'
         if 'text' in req:
             ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr {req['text']}")
@@ -155,14 +125,11 @@ class Translator:
             re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
         else:
             ray_serve_logger.warning(f"rrrrrrrrrrrrrrrrr req[text] rrrrrrrrrrrrrr no text")
-
-        #req = await req.json()
-        #return self.translate(req["text"])
-        #return self.folders
         return re
 
 
 
+#app = Translator.options(route_prefix="/translate").bind()
 app = Translator.options(route_prefix="/translate").bind()
 
 
