@@ -124,7 +124,7 @@ class Translator:
         else:
             ray_serve_logger.warning(f"Missing text field in the json  request = {req}")
         #return re
-        file_path = "/tmp/ray/session_latest/runtime_resources/working_dir_files/https_github_com_Itamarf12_test_ray_deploy_archive_HEAD/my_file.txt"
+        file_path = "/tmp/ray/session_latest/runtime_resources/working_dir_files/https_github_com_Itamarf12_test3_archive_HEAD/my_file.txt"
         first_line = get_first_line(file_path)
         return first_line
 
