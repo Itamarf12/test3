@@ -133,11 +133,8 @@ def download_directory(bucket_name, source_directory, destination_directory):
 
         # Download the file
         if source_directory != blob.name:
-            #blob.download_to_filename(local_path)
+            blob.download_to_filename(local_path)
             print(f"Downloaded {blob.name} to {local_path}")
-
-
-
 
 
 @serve.deployment
@@ -154,6 +151,13 @@ class Translator:
         with open('/tmp/temp_credentials.json', 'w') as temp_file:
             temp_file.write(decoded_key)
         ray_serve_logger.warning(f"aaaaaaaaaaaaaaa 4444444")
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/tmp/temp_credentials.json'
+
+        bucket_name = "apiiro-trained-models"  # "your-bucket-name"
+        source_directory = "w2v-models/latest/"  # "path/to/your/source-file"
+        destination_directory = "/tmp/dd1"
+
+        download_directory(bucket_name, source_directory, destination_directory)
 
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, REGION, BUCKET, S3_DIRECTORY, MODEL_LOCAL_DIR)
         self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
@@ -163,14 +167,6 @@ class Translator:
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
-
-        bucket_name = "apiiro-trained-models"  # "your-bucket-name"
-        source_directory = "w2v-models/latest/"  # "path/to/your/source-file"
-        destination_directory = "/tmp/dd1"
-
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/tmp/temp_credentials.json'
-        download_directory(bucket_name, source_directory, destination_directory)
-
 
         req = await req.json()
         re = 'NO DATA - missing text field'
