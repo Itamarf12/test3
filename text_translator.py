@@ -157,7 +157,7 @@ class Translator:
         source_directory = "w2v-models/latest/"  # "path/to/your/source-file"
         #destination_directory = '/tmp/tt1'#MODEL_LOCAL_DIR
 
-        download_directory(bucket_name, source_directory, destination_directory)
+        #download_directory(bucket_name, source_directory, destination_directory)
 
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, REGION, BUCKET, S3_DIRECTORY, MODEL_LOCAL_DIR)
         self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
