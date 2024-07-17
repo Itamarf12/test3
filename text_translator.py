@@ -8,7 +8,7 @@ from ray import serve
 import logging
 import base64
 import json
-
+from google.cloud import storage
 
 ray_serve_logger = logging.getLogger("ray.serve")
 BUCKET = 'nonsensitive-data'
