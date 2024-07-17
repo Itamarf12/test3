@@ -168,6 +168,7 @@ class Translator:
         source_directory = "w2v-models/latest/"  # "path/to/your/source-file"
         destination_directory = "/tmp/dd1"
 
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/tmp/temp_credentials.json'
         download_directory(bucket_name, source_directory, destination_directory)
 
 
