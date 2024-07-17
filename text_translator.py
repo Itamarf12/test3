@@ -141,8 +141,8 @@ def download_directory(bucket_name, source_directory, destination_directory):
 class Translator:
     def __init__(self):
         self.device = DEVICE
-        # aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
-        # aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+        aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
+        aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
         ray_serve_logger.warning("aaaaaaaaaaaaaaa  1111111")
         encoded_key = os.getenv('GCP_CRED')
         ray_serve_logger.warning(f"aaaaaaaaaaaaaaa   22222   {encoded_key}")
@@ -155,9 +155,9 @@ class Translator:
 
         bucket_name = "apiiro-trained-models"  # "your-bucket-name"
         source_directory = "w2v-models/latest/"  # "path/to/your/source-file"
-        #destination_directory = '/tmp/tt1'#MODEL_LOCAL_DIR
+        destination_directory = '/tmp/tt1'#MODEL_LOCAL_DIR
 
-        #download_directory(bucket_name, source_directory, destination_directory)
+        download_directory(bucket_name, source_directory, destination_directory)
 
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, REGION, BUCKET, S3_DIRECTORY, MODEL_LOCAL_DIR)
         self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
