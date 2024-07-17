@@ -63,7 +63,7 @@ def load_model(model_path):
     return model, tokenizer
 
 
-def get_next_word_probabilities(sentence, tokenizer, device, model, top_k=2):
+def get_next_word_probabilities(sentence, tokenizer, device, model, top_k=1):
 
     # Get the model predictions for the sentence.
     inputs = tokenizer.encode(sentence, return_tensors="pt").to(device)  # .cuda()
@@ -137,6 +137,13 @@ def download_directory(bucket_name, source_directory, destination_directory):
             print(f"Downloaded {blob.name} to {local_path}")
 
 
+def get_risky_score(sentence, tokenizer, device, model):
+    res = get_next_word_probabilities(sentence, tokenizer, device, model, top_k=1)
+    choosen_res = res[0]
+    return choosen_res[1] if choosen_res[0].lower()=='pos' else 1-choosen_res[1]
+
+
+
 @serve.deployment
 class Translator:
     def __init__(self):
@@ -172,13 +179,11 @@ class Translator:
         re = 'NO DATA - missing text field'
         if 'text' in req:
             sentence = req['text']
-            re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
+            #re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
+            re = get_risky_score(sentence, self.tokenizer, DEVICE, self.model)
         else:
             ray_serve_logger.warning(f"Missing text field in the json  request = {req}")
         return re
-
-
-
 
 
 #app = Translator.options(route_prefix="/translate").bind()
