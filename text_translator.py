@@ -154,7 +154,7 @@ class Translator:
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/tmp/temp_credentials.json'
 
         bucket_name = "apiiro-trained-models"  # "your-bucket-name"
-        source_directory = "w2v-models/latest/"  # "path/to/your/source-file"
+        source_directory = "risky-feature-requests/phi-3/"  # "path/to/your/source-file"
         destination_directory = '/tmp/tt1'#MODEL_LOCAL_DIR
 
         download_directory(bucket_name, source_directory, destination_directory)
