@@ -1,5 +1,5 @@
 import starlette
-import boto3
+import boto3    
 import os
 import random
 import torch
@@ -91,6 +91,17 @@ def get_next_word_probabilities(sentence, tokenizer, device, model, top_k=2):
     return list(zip(topk_candidates_tokens, topk_candidates_probabilities))
 
 
+def get_first_line(file_path):
+    """Reads and returns the first line of a file."""
+    try:
+        with open(file_path, 'r') as file:
+            first_line = file.readline().strip()
+            return first_line
+    except FileNotFoundError:
+        return f"Error: The file {file_path} does not exist."
+    except Exception as e:
+        return f"Error: An unexpected error occurred. {str(e)}"
+
 @serve.deployment
 class Translator:
     def __init__(self):
@@ -112,7 +123,11 @@ class Translator:
             re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
         else:
             ray_serve_logger.warning(f"Missing text field in the json  request = {req}")
-        return re
+        #return re
+        file_path = "/tmp/ray/session_latest/runtime_resources/working_dir_files/https_github_com_Itamarf12_test_ray_deploy_archive_HEAD/my_file.txt"
+        first_line = get_first_line(file_path)
+        return first_line
+
 
 
 
