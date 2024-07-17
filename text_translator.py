@@ -112,9 +112,9 @@ class Translator:
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
         encoded_key = os.getenv('GCP_CRED')
-        # decoded_key = base64.b64decode(encoded_key).decode('utf-8')
-        # with open('/tmp/temp_credentials.json', 'w') as temp_file:
-        #     temp_file.write(decoded_key)
+        decoded_key = base64.b64decode(encoded_key).decode('utf-8')
+        with open('/tmp/temp_credentials.json', 'w') as temp_file:
+            temp_file.write(decoded_key)
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, REGION, BUCKET, S3_DIRECTORY, MODEL_LOCAL_DIR)
         self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
 
