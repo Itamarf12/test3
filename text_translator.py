@@ -105,6 +105,41 @@ def get_first_line(file_path):
     except Exception as e:
         return f"Error: An unexpected error occurred. {str(e)}"
 
+
+
+def download_directory(bucket_name, source_directory, destination_directory):
+    """Downloads all files from a specified directory in a bucket to a local directory."""
+    # Initialize a client
+    storage_client = storage.Client()
+
+    # Get the bucket
+    bucket = storage_client.bucket(bucket_name)
+
+    # List all blobs in the directory
+    blobs = bucket.list_blobs(prefix=source_directory)
+
+    # Ensure the destination directory exists
+    if not os.path.exists(destination_directory):
+        os.makedirs(destination_directory)
+
+    for blob in blobs:
+        # Determine the local file path
+        local_path = os.path.join(destination_directory, os.path.relpath(blob.name, source_directory))
+        local_dir = os.path.dirname(local_path)
+
+        # Ensure the local directory exists
+        if not os.path.exists(local_dir):
+            os.makedirs(local_dir)
+
+        # Download the file
+        if source_directory != blob.name:
+            #blob.download_to_filename(local_path)
+            print(f"Downloaded {blob.name} to {local_path}")
+
+
+
+
+
 @serve.deployment
 class Translator:
     def __init__(self):
@@ -128,18 +163,16 @@ class Translator:
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
+
+        bucket_name = "apiiro-trained-models"  # "your-bucket-name"
+        source_directory = "w2v-models/latest/"  # "path/to/your/source-file"
+        destination_directory = "/tmp/dd1"
+
+        download_directory(bucket_name, source_directory, destination_directory)
+
+
         req = await req.json()
         re = 'NO DATA - missing text field'
-
-        ray_serve_logger.warning("1111111")
-        encoded_key = os.getenv('GCP_CRED')
-        ray_serve_logger.warning(f"22222   {encoded_key}")
-        decoded_key = base64.b64decode(encoded_key).decode('utf-8')
-        ray_serve_logger.warning(f"33333   {decoded_key}")
-        with open('/tmp/temp_credentials.json', 'w') as temp_file:
-            temp_file.write(decoded_key)
-        ray_serve_logger.warning(f"4444444")
-
         if 'text' in req:
             sentence = req['text']
             re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
