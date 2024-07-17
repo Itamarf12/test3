@@ -111,10 +111,7 @@ class Translator:
         self.device = DEVICE
         aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        encoded_key = os.getenv('GCP_CRED')
-        decoded_key = base64.b64decode(encoded_key).decode('utf-8')
-        with open('/tmp/temp_credentials.json', 'w') as temp_file:
-            temp_file.write(decoded_key)
+
         download_directory_from_s3(aws_access_key_id, aws_secret_access_key, REGION, BUCKET, S3_DIRECTORY, MODEL_LOCAL_DIR)
         self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
 
@@ -125,15 +122,23 @@ class Translator:
     async def __call__(self, req: starlette.requests.Request):
         req = await req.json()
         re = 'NO DATA - missing text field'
+
+        ray_serve_logger.warning("1111111")
+        encoded_key = os.getenv('GCP_CRED')
+        ray_serve_logger.warning(f"22222   {encoded_key}")
+        decoded_key = base64.b64decode(encoded_key).decode('utf-8')
+        ray_serve_logger.warning(f"33333   {decoded_key}")
+        with open('/tmp/temp_credentials.json', 'w') as temp_file:
+            temp_file.write(decoded_key)
+        ray_serve_logger.warning(f"4444444")
+
         if 'text' in req:
             sentence = req['text']
             re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
         else:
             ray_serve_logger.warning(f"Missing text field in the json  request = {req}")
-        #return re
-        file_path = "/tmp/ray/session_latest/runtime_resources/working_dir_files/https_github_com_Itamarf12_test3_archive_HEAD/my_file.txt"
-        first_line = get_first_line(file_path)
-        return first_line
+        return re
+
 
 
 
