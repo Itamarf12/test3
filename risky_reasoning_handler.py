@@ -1,20 +1,10 @@
 import starlette
-import boto3
-import os
-import random
-import torch
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 from ray import serve
 import logging
-import base64
-import json
 from google.cloud import storage
 
 ray_serve_logger = logging.getLogger("ray.serve")
-BUCKET = 'nonsensitive-data'
-REGION = 'us-east-1'
-S3_DIRECTORY = 'phi3_finetuned'
-MODEL_LOCAL_DIR = '/tmp/phi3'
 DEVICE = 'cpu'
 
 
