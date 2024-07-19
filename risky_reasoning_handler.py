@@ -9,7 +9,7 @@ DEVICE = 'cpu'
 
 
 @serve.deployment
-class RiskyReasoning:
+class Translator:
     def __init__(self):
         self.device = DEVICE
 
@@ -31,6 +31,6 @@ class RiskyReasoning:
 
 
 #app = Translator.options(route_prefix="/translate").bind()
-app = RiskyReasoning.bind()
+app = Translator.bind()
 
 
