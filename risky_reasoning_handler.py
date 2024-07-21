@@ -20,9 +20,6 @@ class RiskyReasoning:
     async def __call__(self, req: starlette.requests.Request):
 
         req = await req.json()
-        self.tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-small")
-        self.model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-small")
-
         re = 'NO DATA - missing text field'
         if 'text' in req:
             sentence = req['text']
