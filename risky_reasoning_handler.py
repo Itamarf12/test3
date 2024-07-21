@@ -5,7 +5,8 @@ import logging
 from google.cloud import storage
 
 ray_serve_logger = logging.getLogger("ray.serve")
-MODEL = "Open-Orca/Mistral-7B-OpenOrca"
+#MODEL = "Open-Orca/Mistral-7B-OpenOrca"
+MODEL = "microsoft/Orca-2-13b"
 #MODEL = 'microsoft/DialoGPT-small'
 DEVICE = 'cpu'
 
