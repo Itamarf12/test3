@@ -5,6 +5,7 @@ import logging
 from google.cloud import storage
 
 ray_serve_logger = logging.getLogger("ray.serve")
+MODEL = "Open-Orca/Mistral-7B-OpenOrca"
 DEVICE = 'cpu'
 
 
@@ -18,8 +19,8 @@ class RiskyReasoning:
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
-        self.tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-small")
-        self.model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-small")
+        self.tokenizer = AutoTokenizer.from_pretrained(MODEL)
+        self.model = AutoModelForCausalLM.from_pretrained(MODEL)
 
         req = await req.json()
         re = 'NO DATA - missing text field'
