@@ -1,5 +1,5 @@
 import starlette
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM
 from ray import serve
 import logging
 from google.cloud import storage
@@ -12,6 +12,8 @@ DEVICE = 'cpu'
 class RiskyReasoning:
     def __init__(self):
         self.device = DEVICE
+        self.tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-small")
+        self.model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-small")
 
     def translate(self, text: str) -> str:
         #return self.model(text)[0]["translation_text"]
