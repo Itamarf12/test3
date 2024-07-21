@@ -32,6 +32,20 @@ description:
 {prompt_prefix}
     """
 
+def categorical_response1(model, tokenizer, title, description):
+    system_message = """
+Role: Application Security (AppSec) Assistant
+Directive: Adhere strictly to the provided guidelines.
+Task: Upon review of the specified Jira ticket, determine and concisely state the security risk it presents.
+    """
+    user_message = get_prompt1(title, description)
+    prompt = f"<|im_start|>system\n{system_message}<|im_end|>\n<|im_start|>user\n{user_message}<|im_end|>\n<|im_start|>assistant"
+    inputs = tokenizer(prompt, return_tensors='pt').to(DEVICE)
+    outputs = model.generate(
+    **inputs, max_new_tokens=256, use_cache=True, do_sample=True,
+    temperature=0.2, top_p=0.95)
+    res = tokenizer.batch_decode([outputs[0][inputs['input_ids'].size(1):]])[0]
+    return res
 
 @serve.deployment
 class RiskyReasoning:
