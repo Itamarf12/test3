@@ -6,6 +6,7 @@ from google.cloud import storage
 
 ray_serve_logger = logging.getLogger("ray.serve")
 MODEL = "Open-Orca/Mistral-7B-OpenOrca"
+#MODEL = 'microsoft/DialoGPT-small'
 DEVICE = 'cpu'
 
 
@@ -24,12 +25,8 @@ class RiskyReasoning:
 
         req = await req.json()
         re = 'NO DATA - missing text field'
-        if 'text' in req:
-            sentence = req['text']
-            #re = get_next_word_probabilities(sentence, self.tokenizer, self.device, self.model, top_k=2)
-            re = get_risky_score(sentence, self.tokenizer, DEVICE, self.model)
-        else:
-            ray_serve_logger.warning(f"Missing text field in the json  request = {req}")
+
+        ray_serve_logger.warning(f"Missing text field in the json  request = {req}")
         return re
 
 
