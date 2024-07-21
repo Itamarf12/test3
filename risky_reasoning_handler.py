@@ -65,7 +65,10 @@ class RiskyReasoning:
 
         req = await req.json()
         re = 'NO DATA - missing text field'
-
+        title = "This is a test"
+        description = "This is a ticket description"
+        response2 = categorical_response1(self.model, self.tokenizer, title, description)
+        
         ray_serve_logger.warning(f"Missing text field in the json  request = {req}")
         return re
 
