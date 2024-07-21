@@ -20,9 +20,11 @@ class RiskyReasoning:
         return "bbbbbbbbbbbb"
 
     async def __call__(self, req: starlette.requests.Request):
+        ray_serve_logger.warning(f"1111111111111")
         self.tokenizer = AutoTokenizer.from_pretrained(MODEL)
+        ray_serve_logger.warning(f"2222222222222")
         self.model = AutoModelForCausalLM.from_pretrained(MODEL)
-
+        ray_serve_logger.warning(f"3333333333")
         req = await req.json()
         re = 'NO DATA - missing text field'
 
