@@ -148,8 +148,8 @@ def get_risky_score(sentence, tokenizer, device, model):
 class Translator:
     def __init__(self):
         self.device = DEVICE
-        aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
-        aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+        # aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
+        # aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
         ray_serve_logger.warning("aaaaaaaaaaaaaaa  1111111")
         encoded_key = os.getenv('GCP_CRED')
         ray_serve_logger.warning(f"aaaaaaaaaaaaaaa   22222   {encoded_key}")
