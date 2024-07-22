@@ -164,10 +164,10 @@ class Translator:
         source_directory = "risky-feature-requests/phi-3/"  # "path/to/your/source-file"
         destination_directory = MODEL_LOCAL_DIR
 
-        download_directory(bucket_name, source_directory, destination_directory)
+        #download_directory(bucket_name, source_directory, destination_directory)
 
         #download_directory_from_s3(aws_access_key_id, aws_secret_access_key, REGION, BUCKET, S3_DIRECTORY, MODEL_LOCAL_DIR)
-        self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
+        #self.model, self.tokenizer = load_model(MODEL_LOCAL_DIR)
 
     def translate(self, text: str) -> str:
         #return self.model(text)[0]["translation_text"]
