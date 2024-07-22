@@ -150,19 +150,19 @@ class Translator:
         self.device = DEVICE
         # aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
         # aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        ray_serve_logger.warning("aaaaaaaaaaaaaaa  1111111")
-        encoded_key = os.getenv('GCP_CRED')
-        ray_serve_logger.warning(f"aaaaaaaaaaaaaaa   22222   {encoded_key}")
-        decoded_key = base64.b64decode(encoded_key).decode('utf-8')
-        ray_serve_logger.warning(f"aaaaaaaaaaaaaaa 33333   {decoded_key}")
-        with open('/tmp/temp_credentials.json', 'w') as temp_file:
-            temp_file.write(decoded_key)
-        ray_serve_logger.warning(f"aaaaaaaaaaaaaaa 4444444")
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/tmp/temp_credentials.json'
-
-        bucket_name = "apiiro-trained-models"  # "your-bucket-name"
-        source_directory = "risky-feature-requests/phi-3/"  # "path/to/your/source-file"
-        destination_directory = MODEL_LOCAL_DIR
+        # ray_serve_logger.warning("aaaaaaaaaaaaaaa  1111111")
+        # encoded_key = os.getenv('GCP_CRED')
+        # ray_serve_logger.warning(f"aaaaaaaaaaaaaaa   22222   {encoded_key}")
+        # decoded_key = base64.b64decode(encoded_key).decode('utf-8')
+        # ray_serve_logger.warning(f"aaaaaaaaaaaaaaa 33333   {decoded_key}")
+        # with open('/tmp/temp_credentials.json', 'w') as temp_file:
+        #     temp_file.write(decoded_key)
+        # ray_serve_logger.warning(f"aaaaaaaaaaaaaaa 4444444")
+        # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/tmp/temp_credentials.json'
+        #
+        # bucket_name = "apiiro-trained-models"  # "your-bucket-name"
+        # source_directory = "risky-feature-requests/phi-3/"  # "path/to/your/source-file"
+        # destination_directory = MODEL_LOCAL_DIR
 
         #download_directory(bucket_name, source_directory, destination_directory)
 
